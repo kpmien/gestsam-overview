@@ -96,43 +96,6 @@ The project was built for **NAO Holding** (Burkina Faso / Bobo-Dioulasso) and is
   <img src="screenshots/facture.png" width="440" alt="Invoice"/>
 </p>
 
-
----
-
-## 🗂️ Project Structure
-
-```
-gestsam/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── CommandeController.php   # Order logic + invoice generation
-│   │   │   ├── ProduitController.php    # Products, suppliers, expenses, dashboard
-│   │   │   ├── ClientController.php     # Client CRUD
-│   │   │   └── UserController.php       # Authentication
-│   │   └── Requests/                    # Form Requests (validation)
-│   ├── Models/
-│   │   ├── Commande.php
-│   │   ├── CommandeProduit.php          # Pivot table: orders ↔ products
-│   │   ├── Produit.php
-│   │   ├── Client.php
-│   │   ├── Fournisseur.php
-│   │   └── Depense.php
-│   └── Policies/
-│       └── ClientPolicy.php
-├── database/
-│   └── migrations/                      # 8 migrations defining the schema
-├── resources/views/
-│   ├── commande/                        # Create, list, detail, edit
-│   ├── produit/
-│   ├── client/
-│   ├── fournisseur/
-│   ├── depense/
-│   ├── facture/
-│   └── dashboard.blade.php
-└── routes/web.php                       # All routes protected by auth middleware
-```
-
 ---
 
 ## 🗄️ Data Model
@@ -191,6 +154,5 @@ Key relationships:
 
 ## ⚖️ License
 
-© 2024 Kounabé Paulin MIEN. Built for NAO Holding.  
+© 2024 Kounabé Paulin MIEN. Built for private consumer.  
 This repository is shared for demonstration purposes only.  
-The source code may not be copied, modified, or reused without explicit permission.

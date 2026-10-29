@@ -98,42 +98,6 @@ Le projet a été réalisé pour **NAO Holding** (Burkina Faso / Bobo-Dioulasso)
 
 ---
 
-## 🗂️ Architecture du projet
-
-```
-gestsam/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── CommandeController.php   # Logique commandes + facturation
-│   │   │   ├── ProduitController.php    # Produits, fournisseurs, dépenses, dashboard
-│   │   │   ├── ClientController.php     # CRUD clients
-│   │   │   └── UserController.php       # Authentification
-│   │   └── Requests/                    # Form Requests (validation)
-│   ├── Models/
-│   │   ├── Commande.php
-│   │   ├── CommandeProduit.php          # Table pivot commandes ↔ produits
-│   │   ├── Produit.php
-│   │   ├── Client.php
-│   │   ├── Fournisseur.php
-│   │   └── Depense.php
-│   └── Policies/
-│       └── ClientPolicy.php
-├── database/
-│   └── migrations/                      # 8 migrations structurant le schéma
-├── resources/views/
-│   ├── commande/                        # Création, liste, détail, édition
-│   ├── produit/
-│   ├── client/
-│   ├── fournisseur/
-│   ├── depense/
-│   ├── facture/
-│   └── dashboard.blade.php
-└── routes/web.php                       # Toutes les routes protégées par auth
-```
-
----
-
 ## 🗄️ Modèle de données
 
 ```
@@ -189,6 +153,5 @@ Les relations clés :
 
 ## ⚖️ Propriété intellectuelle
 
-© 2024 Kounabé Paulin MIEN. Projet réalisé pour NAO Holding.  
+© 2024 Kounabé Paulin MIEN. Projet réalisé pour un client privé.  
 Ce dépôt est publié à des fins de démonstration uniquement.  
-Le code source ne peut être copié, modifié ou réutilisé sans autorisation explicite.
