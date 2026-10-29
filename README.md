@@ -61,29 +61,39 @@ The project was built for **NAO Holding** (Burkina Faso / Bobo-Dioulasso) and is
 
 ## 📸 Screenshots
 
-### Home page
+### Home Page
 <p align="center">
-  <img src="screenshots/dashboard.png" width="880" alt="Dashboard"/>
+  <img src="screenshots/dashboard.png" width="880" alt="Home Page"/>
 </p>
 
-### Order
+### Dashboard
 <p align="center">
-  <img src="screenshots/commande.png" width="880" alt="Order"/>
+  <img src="screenshots/rapport.png" width="880" alt="Dashboard"/>
 </p>
 
-### Create order 
+### Create Order 
 <p align="center">
-  <img src="screenshots/commande_create.png" width="880" alt="Dashboard"/>
+  <img src="screenshots/creer_commande.png" width="880" alt="Create Commande"/>
 </p>
 
-### Order detail
+### Create Produit
 <p align="center">
-  <img src="screenshots/commande_detail.png" width="880" alt="Dashboard"/>
+  <img src="screenshots/creer_produit.png" width="880" alt="Create Produit"/>
+</p>
+
+### Purchase Invoice
+<p align="center">
+  <img src="screenshots/facture_achat.png" width="880" alt="Purchase Invoice"/>
+</p>
+
+### Create Purchase Invoice
+<p align="center">
+  <img src="screenshots/creer_facture_achat.png" width="880" alt="Create Purchase Invoice"/>
 </p>
 
 ### Invoice
 <p align="center">
-  <img src="screenshots/facture-pdf.png" width="440" alt="Invoice"/>
+  <img src="screenshots/facture.png" width="440" alt="Invoice"/>
 </p>
 
 

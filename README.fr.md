@@ -61,32 +61,40 @@ Le projet a été réalisé pour **NAO Holding** (Burkina Faso / Bobo-Dioulasso)
 
 ## 📸 Capture d'ecran
 
+### Accueil
+<p align="center">
+  <img src="screenshots/dashboard.png" width="880" alt="Accueil"/>
+</p>
+
 ### Tableau de bord
 <p align="center">
-  <img src="screenshots/dashboard.png" width="880" alt="Dashboard"/>
+  <img src="screenshots/rapport.png" width="880" alt="Tableau de bord"/>
 </p>
 
-### Commandes
+### Creer une commande 
 <p align="center">
-  <img src="screenshots/commande.png" width="880" alt="Commandes"/>
+  <img src="screenshots/creer_commande.png" width="880" alt="Creer Commande"/>
 </p>
 
-### Créer une commande 
+### Creer un produit
 <p align="center">
-  <img src="screenshots/commande_create.png" width="880" alt="Créer une commande"/>
+  <img src="screenshots/creer_produit.png" width="880" alt="Creer Produit"/>
 </p>
 
-### Détail d'une commande
+### Facture d'achat
 <p align="center">
-  <img src="screenshots/commande_detail.png" width="880" alt="Détail d'une commande"/>
-</p>
+  <img src="screenshots/facture_achat.png" width="880" alt="Facture Achat"/>
 </p>
 
-### Facture PDF
+### Creer une facture d'achat
 <p align="center">
-  <img src="screenshots/facture-pdf.png" width="440" alt="Facture"/>
+  <img src="screenshots/creer_facture_achat.png" width="880" alt="Creer Facture d'Achat"/>
 </p>
 
+### Facture 
+<p align="center">
+  <img src="screenshots/facture.png" width="440" alt="Facture"/>
+</p>
 
 ---
 
