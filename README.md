@@ -1,8 +1,8 @@
-# 🏪 GestSam — Business Management System
+# 🏪 GestSam : Business Management System
 
-> A full-featured web application for managing commercial operations, built with **Laravel 11** — currently live in production and used daily by merchants.
+> A full-featured web application for running a trading business, built with **Laravel 11**. Live in production and used daily by the company's staff.
 
-![Status](https://img.shields.io/badge/status-production-brightgreen) ![Laravel](https://img.shields.io/badge/Laravel-11-red) ![PHP](https://img.shields.io/badge/PHP-8.x-blue) ![Hosting](https://img.shields.io/badge/hosting-Hostinger-orange)
+![Status](https://img.shields.io/badge/status-production-brightgreen) ![Laravel](https://img.shields.io/badge/Laravel-11-red) ![PHP](https://img.shields.io/badge/PHP-8.2-blue) ![Tests](https://img.shields.io/badge/tests-PHPUnit-informational)
 
 🇫🇷 [Version française](README.fr.md)
 
@@ -10,52 +10,74 @@
 
 ## 📌 Overview
 
-**GestSam** is an internal management application designed for the day-to-day operations of a trading business. It covers the full sales cycle — from product stock management to client invoicing — including order tracking, expense recording, and supplier management.
+**GestSam** is an internal management application covering the full life cycle of a trading business: purchasing from suppliers, stock valuation, customer orders and partial payments, PDF invoicing, operating expenses, and a period-based profit report.
 
-The project was built for **NAO Holding** (Burkina Faso / Bobo-Dioulasso) and is **currently running in production**, hosted on **Hostinger**, actively used by the company's sales teams.
+The project was built for **NAO Holding** (Bobo-Dioulasso, Burkina Faso) and is **running in production**, with two user roles: **admin** (full access) and **accountant** (sales only, costs and profit hidden).
+
+The 2026 release reworked the accounting core: weighted average cost of stock, cost of goods frozen at the time of sale, and a clean split between stock purchases and operating expenses. Profit is now computed as **sales − COGS − operating expenses**, by month or by year.
 
 ---
 
 ## ✨ Core Features
 
-### 📦 Product & Stock Management
-- Add, edit, and delete products
-- Real-time stock level tracking
-- Automatic supplier association (created on the fly if not existing)
-- Negative stock protection enforced at the model level
-- Global stock valuation view (quantity × purchase price)
-
-### 🛒 Order Management
-- Multi-product order creation with dynamic product selection
-- Stock availability check before order confirmation
-- Automatic calculation of total, amount paid, and remaining balance
+### 🛒 Sales & Orders
+- Multi-product order creation with searchable product picker (Select2)
+- Stock availability check before confirmation
+- Automatic total, amount paid and remaining balance
+- **Partial payments (versements)**: numbered installments per order, with the paid amount reconciled from the installments
 - Order statuses: **Pending**, **Settled**, **Cancelled**
-- Order cancellation with automatic stock restoration and client debt recalculation
-- Full order editing with stock and debt synchronization
+- Cancellation restores stock and recomputes the client's debt; cancelled orders are excluded from every report
+- Full order editing with stock and debt synchronisation (editing a cancelled order is refused)
 
-### 🧾 PDF Invoice Generation
-- Invoice generation via **FPDF**
-- Custom company header and footer with branding images
+### 🧾 Customer Invoices (PDF)
+- Generated with **FPDF**, company header and footer, client name and phone
 - Formatted invoice number (`FAC-00001`)
-- Line items, totals, amount paid, and outstanding balance
+- Line items, total, amount paid and outstanding balance
 
-### 👥 Client Management
+### 👥 Clients
 - Automatic client creation on first order
-- Per-client debt balance tracking
-- Manual client profile updates
+- Debt computed dynamically from unsettled orders
+- Manual update of name, phone and address
 
-### 🏭 Supplier Management
-- Supplier registration (name, phone)
-- On-the-fly creation when adding a new product
+### 📦 Products & Stock
+- Product catalogue with on-the-fly supplier creation
+- **Weighted average cost (CUMP)**: the unit cost is recomputed at every stock entry
+- **Cost frozen at sale**: each order line stores the purchase cost of the moment, so historical margins never drift
+- Purchase cost is read-only on the product form (driven by purchase invoices); quantity stays editable as an inventory adjustment
+- Negative stock guard enforced in the model's `booted()` hook
+- Quick product creation from the purchase invoice form
 
-### 💸 Expense Tracking
-- Log operational expenses (label, amount, date)
-- Integrated into the global profit calculation
+### 🏭 Suppliers & Purchases (admin only)
+- Supplier registry with edit form and on-the-fly creation
+- **Purchase invoices**: received goods plus customs, transit and other fees, **allocated to the products and capitalised** into their cost (no immediate expense)
+- **Supplier payments** (bank or cash): numbered, tracked as cash flow, no impact on profit; invoice status unpaid / partial / paid
+- **Supplier debts** view: open invoices and total amount due
+- Invoice cancellation restores stock and cost, refused if a payment exists or the goods were already sold
+- Purchase invoice **PDF** (DomPDF)
 
-### 📊 Dashboard
-- At-a-glance summary: total sales, total cost, expenses, **net profit**
-- Remaining stock value
-- Order line history and expense log
+### 💸 Expenses
+- Expense categories: operating charge, goods purchase, customs/transit, supplier payment. **Only operating charges reduce profit**
+- Operating charges split into **fixed** (rent, salaries) and **variable** (electricity, transport)
+- Create, edit and delete expenses
+
+### 📊 Dashboard & Report
+- Default view on the **current month**, with a month / year selector (or whole year)
+- Period figures: sales, COGS, fixed and variable charges, **net profit**, purchases of the period
+- Current balances: stock value, client debts, supplier debts
+- Admin report with **Chart.js**: top 20 products, top clients, 12-month sales trend
+- Indicator cards on the dashboard
+
+### 👛 Personal Expenses
+- Monthly salary and personal expense log by category (food, transport, family, health, leisure, other)
+- Remaining balance, percentage consumed, end-of-month projection and daily budget for the current month
+- Comparison with the previous month and 6-month history
+
+### 🔐 Roles & Security
+- Two roles stored on the user: **admin** and **comptable** (accountant)
+- `EnsureAdmin` middleware guards the report, products, suppliers and purchase modules; the sidebar and cost columns adapt to the role
+- Login throttled to 5 attempts per minute, show/hide password toggle
+- Seeded accounts driven by `.env`, no plain-text passwords in the repository
+- Critical operations (orders, cancellations, purchase invoices, payments) wrapped in **DB transactions**
 
 ---
 
@@ -71,14 +93,14 @@ The project was built for **NAO Holding** (Burkina Faso / Bobo-Dioulasso) and is
   <img src="screenshots/rapport.png" width="880" alt="Dashboard"/>
 </p>
 
-### Create Order 
+### Create Order
 <p align="center">
-  <img src="screenshots/creer_commande.png" width="880" alt="Create Commande"/>
+  <img src="screenshots/creer_commande.png" width="880" alt="Create Order"/>
 </p>
 
-### Create Produit
+### Create Product
 <p align="center">
-  <img src="screenshots/creer_produit.png" width="880" alt="Create Produit"/>
+  <img src="screenshots/creer_produit.png" width="880" alt="Create Product"/>
 </p>
 
 ### Purchase Invoice
@@ -91,9 +113,9 @@ The project was built for **NAO Holding** (Burkina Faso / Bobo-Dioulasso) and is
   <img src="screenshots/creer_facture_achat.png" width="880" alt="Create Purchase Invoice"/>
 </p>
 
-### Invoice
+### Customer Invoice
 <p align="center">
-  <img src="screenshots/facture.png" width="440" alt="Invoice"/>
+  <img src="screenshots/facture.png" width="440" alt="Customer Invoice"/>
 </p>
 
 ---
@@ -101,17 +123,22 @@ The project was built for **NAO Holding** (Burkina Faso / Bobo-Dioulasso) and is
 ## 🗄️ Data Model
 
 ```
-Supplier  ──< Product >──< OrderLine >── Order >── Client
-                                            │
-                                    (qty, sale_price)
+Supplier ──< PurchaseInvoice ──< PurchaseInvoiceLine >── Product
+                 │                                         │
+                 └──< SupplierPayment                      │
+                                                           │
+Client ──< Order ──< OrderLine (qty, sale_price, purchase_cost) ──┘
+            │
+            └──< Installment (versement)
 
-Expense  (standalone, aggregated in dashboard)
+Expense (category, fixed/variable)        PersonalExpense, MonthlySalary
+User (role: admin | comptable)
 ```
 
-Key relationships:
-- A **Client** has many **Orders**
-- An **Order** contains many **Products** through the `commande_produits` pivot table (storing `quantity` and `sale_price` at the time of sale)
-- A **Product** belongs to a **Supplier**
+Key points:
+- An **OrderLine** stores both the sale price and the **purchase cost at the time of sale**
+- A **PurchaseInvoiceLine** stores the supplier unit price and the **landed unit cost** (with fees)
+- **Installments** and **SupplierPayments** are numbered per order / per invoice
 
 ---
 
@@ -119,40 +146,37 @@ Key relationships:
 
 | Layer | Technology |
 |-------|------------|
-| Backend | **Laravel 11** (PHP 8.x) |
-| Database | **MySQL** (production) / SQLite (dev) |
-| Hosting | **Hostinger** (shared hosting) |
-| PDF | **FPDF** via `codedge/laravel-fpdf` |
-| Frontend | **Blade** + Bootstrap + TinyMCE |
-| Auth | Laravel Auth (sessions) + Policies |
-| ORM | Eloquent (with DB transactions) |
+| Backend | **Laravel 11** (PHP 8.2) |
+| Database | **MySQL** (production) / SQLite (tests) |
+| PDF | **FPDF** (`codedge/laravel-fpdf`) for customer invoices, **DomPDF** (`barryvdh/laravel-dompdf`) for purchase invoices |
+| Frontend | **Blade** + Bootstrap 5 + Select2 + DataTables + Chart.js, fonts served locally, assets built with **Vite** |
+| Auth | Laravel Auth (sessions), role middleware, `ClientPolicy` |
+| Tests | **PHPUnit** feature tests (accounting report, period dashboard, purchase invoices, installments, roles, suppliers) |
 
 ---
 
-## 🔐 Security & Reliability
+## 🚀 Operations
 
-- All routes protected by the `auth` middleware
-- Critical operations (create / cancel / edit orders) wrapped in **DB transactions** with rollback on failure
-- Request validation via `FormRequest` classes and inline rules
-- Negative stock guard enforced in the model's `booted()` hook
-- Authorization via `ClientPolicy`
-
+The private repository also ships:
+- A consolidated **changes and deployment runbook** (test database and test site before production)
+- **SQL scripts** to reclassify historical expenses, tag fixed/variable charges and repair distorted historical costs, plus diagnostic queries
+- An **opening balance** procedure for the initial stock, and a one-page sheet for the merchant (inventory, unit costs, supplier debts)
 
 ---
 
 ## 💡 What This Project Demonstrates
 
-- Strong command of **Laravel** (routing, Eloquent ORM, Blade, middleware, policies, form requests)
-- Handling **complex business logic**: stock management, client debt tracking, cascading cancellation effects
-- Generating **custom PDF documents** (print-ready invoices)
-- Using **database transactions** to guarantee data integrity
-- Clean MVC architecture with proper separation of concerns
-- **Real-world deployment** on shared hosting (Hostinger) with Laravel
-- Ability to deliver a complete, production-grade application solving an actual business need
+- Solid command of **Laravel** (routing, Eloquent, Blade, middleware, policies, form requests, seeders, feature tests)
+- **Real accounting logic**: weighted average cost, frozen COGS, capitalised purchase fees, split between cash flow and profit
+- Handling **cascading business rules**: cancellations, stock restoration, debt recomputation, guard rails on destructive actions
+- Custom **PDF documents** with two different engines
+- **Role-based access** with a UI that adapts to the user
+- A real **production deployment** with a documented runbook and data migration scripts
+- Ability to evolve a live application without breaking historical data
 
 ---
 
 ## ⚖️ License
 
-© 2024 Kounabé Paulin MIEN. Built for private consumer.  
-This repository is shared for demonstration purposes only.  
+© 2024-2026 Kounabé Paulin MIEN. Built for a private client.
+This repository is shared for demonstration purposes only. The source code lives in a private repository.
